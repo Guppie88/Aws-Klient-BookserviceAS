@@ -1,11 +1,11 @@
 # AWSklientAS
 
-AWSklientAS är en Java-applikation som hanterar HTTP-förfrågningar för att interagera med API:er. Den är byggd med hjälp av **Apache HttpClient** för att göra GET- och POST-förfrågningar, och **Jackson** används för att serialisera och deserialisera JSON-data. Applikationen är också förberedd för att senare kunna distribueras på AWS.
+**AWSklientAS** är en Java-applikation som hanterar HTTP-förfrågningar för att interagera med ett bokhanterings-API. Den är byggd med hjälp av **Apache HttpClient** för att göra GET- och POST-förfrågningar, och **Jackson** används för att serialisera och deserialisera JSON-data. Applikationen kan anslutas till både en lokal server och en server som körs på AWS Elastic Beanstalk.
 
 ## Funktioner
 
 - **GET-förfrågningar**: Hämtar data från ett API och presenterar det i konsolen.
-- **POST-förfrågningar**: Skickar data (t.ex. böcker och författare) till ett API.
+- **POST-förfrågningar**: Skickar data (t.ex. böcker) till ett API.
 - **Modellklasser**: Applikationen använder Java-modellklasser (`Author` och `Books`) för att representera objekt som skickas till och tas emot från API:et.
 
 ## Teknologier och Beroenden
@@ -37,7 +37,7 @@ AWSklientAS är en Java-applikation som hanterar HTTP-förfrågningar för att i
     ```
 
 3. **Kör applikationen**:
-    Om du kör applikationen med standardinställningarna, behöver du en API-server som är igång på `localhost:8080`.
+    Applikationen kan köras med standardinställningarna för att skicka GET- och POST-förfrågningar till en server som körs på `localhost:5000` eller till Elastic Beanstalk på AWS.
 
     Exempel:
     ```bash
@@ -45,21 +45,35 @@ AWSklientAS är en Java-applikation som hanterar HTTP-förfrågningar för att i
     ```
 
 4. **Testa GET- och POST-förfrågningar**:
-    Applikationen gör GET- och POST-förfrågningar till ett API. Se till att du har en server igång på `http://localhost:8080` som kan ta emot dessa förfrågningar.
+    Applikationen gör GET- och POST-förfrågningar till ett API. Se till att du har en server igång på `http://localhost:5000` eller att du ansluter till din Elastic Beanstalk-instans.
 
-    Du kan också uppdatera URL:en i `Main.java` till en extern API-server om du vill testa mot en fjärrtjänst:
-    ```java
-    ServiceManager.sendGetRequest("http://localhost:8080/api/books");
-    ```
+    - **Lokal URL**: 
+      - `http://localhost:5000/books`
+    - **Elastic Beanstalk URL**: 
+      - `http://bookservice-env.eba-bezef5r2.eu-north-1.elasticbeanstalk.com/books`
 
 ### Exempel på GET- och POST-förfrågningar
 
 - **GET-förfrågan**: Hämtar en lista med böcker från API:et och skriver ut titeln och författarens namn i konsolen.
+    ```java
+    ServiceManager.sendGetRequest("http://localhost:5000/books");
+    // eller för Elastic Beanstalk:
+    ServiceManager.sendGetRequest("http://bookservice-env.eba-bezef5r2.eu-north-1.elasticbeanstalk.com/books");
+    ```
+
 - **POST-förfrågan**: Skickar en bok och författarinformation till API:et och sparar det.
+    ```java
+    Books newBook = new Books("Titel på boken", "ISBN12345");
+    Author author = new Author("Författarens namn", 45);
+    newBook.setAuthor(author);
+    ServiceManager.sendPostBookRequest("http://localhost:5000/books", newBook);
+    // eller för Elastic Beanstalk:
+    ServiceManager.sendPostBookRequest("http://bookservice-env.eba-bezef5r2.eu-north-1.elasticbeanstalk.com/books", newBook);
+    ```
 
 ### Förberedelse för AWS-distribution
 
-Applikationen är förberedd för att kunna distribueras på en AWS-instans, som t.ex. en EC2-instans eller Elastic Beanstalk. När applikationen distribueras kan du byta ut `localhost:8080` mot den publika DNS-adressen eller IP-adressen för din AWS-instans.
+Applikationen är förberedd för att kunna distribueras på en AWS-instans, som t.ex. en EC2-instans eller Elastic Beanstalk. När applikationen distribueras kan du byta ut `localhost:5000` mot den publika DNS-adressen eller IP-adressen för din AWS Elastic Beanstalk-instans.
 
 ## Felsökning
 
@@ -73,6 +87,7 @@ Projektets beroenden hanteras av Maven och finns i `pom.xml`-filen. De inkludera
 - `Apache HttpClient`
 - `Jackson-databind`
 - `SLF4J`
+- `JUnit 5` (valfritt för tester)
 
 ## Licens
 
