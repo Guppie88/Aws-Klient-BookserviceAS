@@ -36,3 +36,38 @@ build/
 
 ### Mac OS ###
 .DS_Store
+# Ignorera alla .pyc-filer
+*.pyc
+
+# Ignorera systemfiler
+ntuser.dat.LOG1
+ntuser.dat.LOG2
+ntuser.ini
+
+# Ignorera OneDrive-synkade filer
+OneDrive/*
+
+# Ignorera nedladdade zip-filer
+*.zip
+
+# Ignorera molndalAPIExample om det inte är relevant
+molndalAPIExample/
+
+# Ignorera binära filer som .msi
+*.msi
+
+# Ignorera Maven nedladdningar och bin-mapp
+apache-maven-*/bin/
+
+# Ignorera databaser och dump-filer
+webservice_dump.sql
+
+# Ignorera ospecifika projektfiler
+aws/
+git/
+
+# Ignorera tillfälliga filer och mappar
+*.log
+*.bak
+*.tmp
+*.swp
